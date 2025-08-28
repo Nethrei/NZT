@@ -10,6 +10,7 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 50px;
+            overflow-x: hidden;
         }
         .card {
             background: #fff;
@@ -32,14 +33,65 @@
             color: #555;
             font-size: 14px;
         }
+        .love-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: #ff4d6d;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .love-btn:hover {
+            background-color: #ff3355;
+        }
+        .love {
+            position: absolute;
+            font-size: 24px;
+            color: #ff4d6d;
+            animation: floatUp 2s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-150px) scale(1.5);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <!-- Foto harus bernama temen.jpg dan ada di folder yang sama -->
+        <!-- Foto harus bernama temen.jpg -->
         <img src="temen.jpg" alt="Foto Teman">
-        <h2>mufti ganteng</h2>
-        <p>Suka gaming, pecinta kopi, dan selalu ceria 😆☕</p>
+        <h2>mufti ganteng bingit</h2>
+        <p>Suka gaming, pecinta kopi, dan pecinta lelaki😆☕</p>
+        <button class="love-btn" onclick="showLove()">💖 Love</button>
     </div>
+
+    <script>
+        function showLove() {
+            for (let i = 0; i < 15; i++) {
+                let love = document.createElement("div");
+                love.className = "love";
+                love.innerHTML = "❤️";
+                document.body.appendChild(love);
+
+                // posisi random
+                love.style.left = (Math.random() * window.innerWidth) + "px";
+                love.style.top = (window.innerHeight - 50) + "px";
+
+                // hapus setelah animasi
+                setTimeout(() => {
+                    love.remove();
+                }, 2000);
+            }
+        }
+    </script>
 </body>
 </html>
