@@ -79,19 +79,26 @@
     <button class="love-btn" onclick="showLove()">💖 Love</button>
   </div>
 
+  <!-- audio untuk musik -->
+  <audio id="memeAudio" src="meme1.mp3"></audio>
+
   <script>
     function showLove() {
-      for (let i = 0; i < 60; i++) { // banyak banget love
+      // play musik
+      const audio = document.getElementById("memeAudio");
+      audio.currentTime = 0; // mulai dari awal setiap klik
+      audio.play();
+
+      // efek love
+      for (let i = 0; i < 60; i++) { 
         let love = document.createElement("div");
         love.className = "love";
         love.innerHTML = ["❤️","💙","💜","💚","💛"][Math.floor(Math.random()*5)];
         document.body.appendChild(love);
 
-        // posisi random di layar
         love.style.left = Math.random() * window.innerWidth + "px";
         love.style.top = Math.random() * window.innerHeight + "px";
 
-        // hapus setelah animasi
         setTimeout(() => {
           love.remove();
         }, 3000);
