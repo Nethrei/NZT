@@ -2,48 +2,55 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Jumpscare Love</title>
+  <title>Profil Teman</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f9;
       margin: 0;
       padding: 0;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       overflow: hidden;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    #start-btn {
-      padding: 20px 40px;
-      font-size: 24px;
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      max-width: 90%;
+      width: 500px; /* lebih gede */
+    }
+    img {
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
+    }
+    h2 {
+      margin: 20px 0 10px 0;
+      color: #333;
+      font-size: 26px;
+    }
+    p {
+      color: #555;
+      font-size: 18px;
+    }
+    .love-btn {
+      margin-top: 20px;
+      padding: 15px 35px;
       border: none;
-      border-radius: 15px;
+      border-radius: 40px;
       background-color: #ff4d6d;
       color: white;
+      font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.4);
-      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    #card {
-      display: none;
-      text-align: center;
-      color: white;
-      z-index: 5;
-    }
-    #card img {
-      width: 90vw;
-      max-width: 500px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.8);
-    }
-    #card h2 {
-      margin: 20px 0 10px;
-      font-size: 28px;
-    }
-    #card p {
-      font-size: 18px;
-      color: #ddd;
+    .love-btn:hover {
+      background-color: #ff3355;
     }
     .love {
       position: fixed;
@@ -64,24 +71,17 @@
   </style>
 </head>
 <body>
-  <!-- Tombol awal -->
-  <button id="start-btn" onclick="start()">Klik Aku</button>
-
-  <!-- Card (foto + bio), awalnya hidden -->
-  <div id="card">
+  <div class="card">
+    <!-- Foto harus bernama temen.jpg -->
     <img src="temen.jpg" alt="Foto Teman">
     <h2>mufti ganteng bingit</h2>
     <p>Suka gaming, pecinta kopi, dan pecinta lelaki 😅☕</p>
+    <button class="love-btn" onclick="showLove()">💖 Love</button>
   </div>
 
   <script>
-    function start() {
-      // sembunyiin tombol
-      document.getElementById("start-btn").style.display = "none";
-      // munculin card
-      document.getElementById("card").style.display = "block";
-      // banjir love
-      for (let i = 0; i < 80; i++) {
+    function showLove() {
+      for (let i = 0; i < 60; i++) { // banyak banget love
         let love = document.createElement("div");
         love.className = "love";
         love.innerHTML = ["❤️","💙","💜","💚","💛"][Math.floor(Math.random()*5)];
