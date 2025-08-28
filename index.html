@@ -1,49 +1,45 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hitung Mundur Waktu Ramadhan</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    #hitung-mundur-ramadhan {
-      font-size: 48px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Profil Teman</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 50px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: inline-block;
+            max-width: 350px;
+        }
+        img {
+            border-radius: 12px;
+            width: 100%;
+            height: auto;
+        }
+        h2 {
+            margin: 15px 0 5px 0;
+            color: #333;
+        }
+        p {
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Hitung Mundur Waktu Ramadhan</h1>
-  <div id="hitung-mundur-ramadhan"></div>
-  <script>
-    // Set tanggal mulai Ramadhan (dalam format Date)
-    const tanggalMulaiRamadhan = new Date('2025-03-10T00:00:00'); // Ganti dengan tanggal mulai Ramadhan yang diinginkan
-
-    // Fungsi untuk mengupdate hitung mundur
-    function updateHitungMundur() {
-      const tanggalSekarang = new Date();
-      const selisihTanggal = tanggalMulaiRamadhan - tanggalSekarang;
-
-      // Hitung mundur dalam hari, jam, menit, dan detik
-      const hari = Math.floor(selisihTanggal / (1000 * 60 * 60 * 24));
-      const jam = Math.floor((selisihTanggal % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const menit = Math.floor((selisihTanggal % (1000 * 60 * 60)) / (1000 * 60));
-      const detik = Math.floor((selisihTanggal % (1000 * 60)) / 1000);
-
-      // Tampilkan hitung mundur
-      document.getElementById('hitung-mundur-ramadhan').innerHTML = `${hari} hari ${jam} jam ${menit} menit ${detik} detik`;
-    }
-
-    // Jalankan fungsi updateHitungMundur setiap detik
-    setInterval(updateHitungMundur, 1000);
-
-    // Jalankan fungsi updateHitungMundur sekali untuk menginisialisasi hitung mundur
-    updateHitungMundur();
-  </script>
+    <div class="card">
+        <!-- Foto harus bernama temen.jpg dan ada di folder yang sama -->
+        <img src="temen.jpg" alt="Foto Teman">
+        <h2>mufti ganteng</h2>
+        <p>Suka gaming, pecinta kopi, dan selalu ceria 😆☕</p>
+    </div>
 </body>
 </html>
-```
