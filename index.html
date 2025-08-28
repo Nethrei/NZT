@@ -2,66 +2,61 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>foto meme</title>
+  <title>Profil Teman</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f9;
       margin: 0;
+      padding: 0;
+      overflow: hidden;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #fce4ec;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
     }
-    .start {
-      text-align: center;
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      max-width: 90%;
+      width: 500px;
     }
-    .start h1 {
-      color: #d81b60;
-      margin-bottom: 20px;
+    img {
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
+      transform: scale(0);
+      transition: transform 0.6s ease-in-out;
     }
-    .btn {
+    img.show {
+      transform: scale(1);
+    }
+    h2 {
+      margin: 20px 0 10px 0;
+      color: #333;
+      font-size: 26px;
+    }
+    p {
+      color: #555;
+      font-size: 18px;
+    }
+    .love-btn {
+      margin-top: 20px;
       padding: 15px 35px;
-      font-size: 22px;
       border: none;
       border-radius: 40px;
-      background-color: #ff4081;
+      background-color: #ff4d6d;
       color: white;
+      font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    .btn:hover {
-      background-color: #e91e63;
+    .love-btn:hover {
+      background-color: #ff3355;
     }
-
-    /* Jumpscare container */
-    .jumpscare {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: black;
-      visibility: hidden;
-    }
-    .jumpscare.active {
-      visibility: visible;
-    }
-    .jumpscare img {
-      max-width: 90vw;
-      max-height: 90vh;
-      transform: scale(0.1);
-      opacity: 0;
-      border-radius: 20px;
-      animation: zoomIn 0.8s forwards;
-    }
-    @keyframes zoomIn {
-      0% { transform: scale(0.1); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* animasi love */
     .love {
       position: fixed;
       font-size: 45px;
@@ -69,41 +64,25 @@
       pointer-events: none;
     }
     @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-120vh) scale(2); }
+      0% {opacity: 1; transform: translateY(0) scale(1);}
+      100% {opacity: 0; transform: translateY(-120vh) scale(2);}
     }
   </style>
 </head>
 <body>
-  <div class="start" id="start">
-    <h1>Tekan tombol di bawah ini</h1>
-    <button class="btn" onclick="trigger()">💖 Klik Aku</button>
+  <div class="card">
+    <img id="foto" src="temen.jpg" alt="Foto Teman">
+    <h2>mufti ganteng bingit</h2>
+    <p>Suka gaming, pecinta kopi, dan pecinta lelaki 😅☕</p>
+    <button class="love-btn" onclick="jumpscare()">💖 Tekan Tombol</button>
   </div>
 
-  <div class="jumpscare" id="jumpscare">
-    <!-- Foto harus bernama temen.jpg -->
-    <img src="temen.jpg" alt="Foto Teman">
-  </div>
-
-  <!-- audio -->
-  <audio id="memeAudio" src="meme1.mp3"></audio>
+  <!-- Musik -->
+  <audio id="musik" src="meme1.mp3"></audio>
 
   <script>
-    function trigger() {
-      // sembunyikan tombol
-      document.getElementById("start").style.display = "none";
-
-      // tampilkan jumpscare
-      const js = document.getElementById("jumpscare");
-      js.classList.add("active");
-
-      // play musik
-      const audio = document.getElementById("memeAudio");
-      audio.currentTime = 0;
-      audio.play();
-
-      // animasi love
-      for (let i = 0; i < 80; i++) {
+    function showLove() {
+      for (let i = 0; i < 60; i++) {
         let love = document.createElement("div");
         love.className = "love";
         love.innerHTML = ["❤️","💙","💜","💚","💛"][Math.floor(Math.random()*5)];
@@ -112,8 +91,17 @@
         love.style.left = Math.random() * window.innerWidth + "px";
         love.style.top = Math.random() * window.innerHeight + "px";
 
-        setTimeout(() => love.remove(), 3000);
+        setTimeout(() => { love.remove(); }, 3000);
       }
+    }
+
+    function jumpscare() {
+      let foto = document.getElementById("foto");
+      let musik = document.getElementById("musik");
+
+      foto.classList.add("show"); // zoom foto
+      musik.play(); // play musik
+      showLove();   // animasi love
     }
   </script>
 </body>
