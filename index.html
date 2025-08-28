@@ -14,33 +14,34 @@
         }
         .card {
             background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
             display: inline-block;
-            max-width: 350px;
+            max-width: 420px; /* biar lebih gede */
         }
         img {
-            border-radius: 12px;
+            border-radius: 15px;
             width: 100%;
             height: auto;
         }
         h2 {
             margin: 15px 0 5px 0;
             color: #333;
+            font-size: 22px;
         }
         p {
             color: #555;
-            font-size: 14px;
+            font-size: 16px;
         }
         .love-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
+            margin-top: 20px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             background-color: #ff4d6d;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
@@ -49,9 +50,9 @@
         }
         .love {
             position: absolute;
-            font-size: 24px;
+            font-size: 40px; /* love lebih gede */
             color: #ff4d6d;
-            animation: floatUp 2s ease-out forwards;
+            animation: floatUp 2.5s ease-out forwards;
         }
         @keyframes floatUp {
             0% {
@@ -60,7 +61,7 @@
             }
             100% {
                 opacity: 0;
-                transform: translateY(-150px) scale(1.5);
+                transform: translateY(-180px) scale(1.8);
             }
         }
     </style>
@@ -70,7 +71,7 @@
         <!-- Foto harus bernama temen.jpg -->
         <img src="temen.jpg" alt="Foto Teman">
         <h2>mufti ganteng bingit</h2>
-        <p>Suka gaming, pecinta kopi, dan pecinta lelaki😆☕</p>
+        <p>Suka gaming, pecinta kopi, dan pecinta lelaki 😖☕</p>
         <button class="love-btn" onclick="showLove()">💖 Love</button>
     </div>
 
@@ -84,12 +85,12 @@
 
                 // posisi random
                 love.style.left = (Math.random() * window.innerWidth) + "px";
-                love.style.top = (window.innerHeight - 50) + "px";
+                love.style.top = (window.innerHeight - 60) + "px";
 
                 // hapus setelah animasi
                 setTimeout(() => {
                     love.remove();
-                }, 2000);
+                }, 2500);
             }
         }
     </script>
