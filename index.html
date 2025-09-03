@@ -1,108 +1,31 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Profil Teman</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-      max-width: 90%;
-      width: 500px;
-    }
-    img {
-      border-radius: 20px;
-      width: 100%;
-      height: auto;
-      transform: scale(0);
-      transition: transform 0.6s ease-in-out;
-    }
-    img.show {
-      transform: scale(1);
-    }
-    h2 {
-      margin: 20px 0 10px 0;
-      color: #333;
-      font-size: 26px;
-    }
-    p {
-      color: #555;
-      font-size: 18px;
-    }
-    .love-btn {
-      margin-top: 20px;
-      padding: 15px 35px;
-      border: none;
-      border-radius: 40px;
-      background-color: #ff4d6d;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-    .love-btn:hover {
-      background-color: #ff3355;
-    }
-    .love {
-      position: fixed;
-      font-size: 45px;
-      animation: floatUp 3s ease-out forwards;
-      pointer-events: none;
-    }
-    @keyframes floatUp {
-      0% {opacity: 1; transform: translateY(0) scale(1);}
-      100% {opacity: 0; transform: translateY(-120vh) scale(2);}
-    }
-  </style>
+  <title>Contoh Tabel Nama</title>
 </head>
 <body>
-  <div class="card">
-    <img id="foto" src="temen.jpg" alt="Foto Teman">
-    <h2>mufti ganteng bingit</h2>
-    <p>Suka gaming, pecinta kopi, dan pecinta lelaki 😅☕</p>
-    <button class="love-btn" onclick="jumpscare()">💖 Tekan Tombol</button>
-  </div>
-
-  <!-- Musik -->
-  <audio id="musik" src="meme1.mp3"></audio>
-
-  <script>
-    function showLove() {
-      for (let i = 0; i < 60; i++) {
-        let love = document.createElement("div");
-        love.className = "love";
-        love.innerHTML = ["❤️","💙","💜","💚","💛"][Math.floor(Math.random()*5)];
-        document.body.appendChild(love);
-
-        love.style.left = Math.random() * window.innerWidth + "px";
-        love.style.top = Math.random() * window.innerHeight + "px";
-
-        setTimeout(() => { love.remove(); }, 3000);
-      }
-    }
-
-    function jumpscare() {
-      let foto = document.getElementById("foto");
-      let musik = document.getElementById("musik");
-
-      foto.classList.add("show"); // zoom foto
-      musik.play(); // play musik
-      showLove();   // animasi love
-    }
-  </script>
+  <h2>Daftar Nama dan Alamat</h2>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+      <th>No</th>
+      <th>Nama</th>
+      <th>Alamat</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Budi</td>
+      <td>Jakarta</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Sinta</td>
+      <td>Bandung</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Andi</td>
+      <td>Surabaya</td>
+    </tr>
+  </table>
 </body>
 </html>
