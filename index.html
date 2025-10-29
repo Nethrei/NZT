@@ -1,145 +1,221 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Form Kasir</title>
-    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="dist/css/select2.min.css">
-    <link rel="stylesheet" href="dist/css/select2-bootstrap4.min.css">
-    <link rel="stylesheet" href="dist/css/animate.css/animate.min.css">
-    <link rel="stylesheet" href="dist/css/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>E-Kasir v1.0</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style>
+    body {
+      background: #f4f6f9;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .header {
+      background: linear-gradient(90deg, #007bff, #00c6ff);
+      color: white;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+    .kartu {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .kartu-judul h6 {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 mt-5 mb-5">
-                    <h2>
-                        <strong>E-Kasir v1.0</strong>
-                        <small class="float-right mt-2">
-                            Pendapatan : Rp. <strong id="pendapatan"></strong>
-                        </small>
-                    </h2>
-                </div>
-            </div>
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="d-flex justify-content-between align-items-center">
+            <strong>E-Kasir v1.0</strong>
+            <small>Pendapatan : Rp. <strong id="pendapatan">0</strong></small>
+          </h2>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="kartu">
+      <div class="kartu-judul">
+        <h6 class="text-muted text-uppercase ls-1">Masukkan Data Pembelian</h6>
+      </div>
+      <div class="kartu-body">
+        <div class="row">
+          <div class="col-md-5">
+            <label for="menu">Menu</label>
+            <select class="form-control" id="menu">
+              <option value="">Pilih Menu</option>
+              <option value="Kopi" data-harga="10000">Kopi</option>
+              <option value="Teh" data-harga="8000">Teh</option>
+              <option value="Roti" data-harga="12000">Roti</option>
+              <option value="Mie Goreng" data-harga="15000">Mie Goreng</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="qty">Qty</label>
+            <input type="number" min="1" value="1" id="qty" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label for="harga">Harga</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp</span>
+              </div>
+              <input type="number" id="harga" class="form-control" readonly>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <br>
+            <button class="btn btn-primary btn-block" id="add">
+              <i class="fa fa-plus-circle"></i> Tambah
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="container-fluid mt-5">
-        <div class="kartu fadeInDown animated">
-            <div class="kartu-judul">
-                <h6 class="text-muted text-uppercase ls-1">Masukkan data pembelian</h6>
-            </div>
-            <div class="kartu-body">
-                <div class="row">
-                    <div class="col-md-5">
-                        <label for="menu">Menu</label>
-                        <select class="form-control" id="menu">
-                            <option value="Pilih">Pilih</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="qty">Qty</label>
-                        <input type="number" min="0" value="1" name="qty" id="qty" class="form-control" placeholder="qty">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="harga">Harga</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp</span>
-                            </div>
-                            <input type="number" name="harga" id="harga" class="form-control" placeholder="harga" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <br>
-                        <button class="btn btn-primary btn-block" id="add" style="margin-top: .5rem;">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i> Tambah
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- list belanja -->
-        <div class="container-fluid">
-            <div class="kartu fadeInUp animated">
-                <div class="kartu-judul">
-                    <h6 class="text-muted text-uppercase ls-1">List Pesanan
-                        <button class="btn btn-warning text-white float-right" data-toggle="modal" data-target="#transaksi">
-                            <i class="fa fa-cart-plus fa-lg mr-2"></i>Check Out
-                        </button>
-                    </h6>
-                </div>
-                <div class="kartu-body mb-0">
-                    <div class="row">
-                        <div class="col">
-                            <table class="table table-striped">
-                                <thead>
-                                    <th>#</th>
-                                    <th>MENU</th>
-                                    <th>HARGA</th>
-                                    <th>QTY</th>
-                                    <th>SUB TOTAL</th>
-                                </thead>
-                                <tbody id="pesanan"></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="4"></td>
-                                        <td><h5 id="total" class="text-uppercase ls-1 text-primary"></h5></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="text-muted text-uppercase ls-1 text-center mb-2">
-            <small>Create with <i class="fa fa-heart text-danger"></i>, [ MIT License ]</small>
-        </footer>
-
-        <!-- modal check out -->
-        <div class="modal fade" id="transaksi">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Total Bayar = 0</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="bayar">Jumlah Bayar</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp</span>
-                            </div>
-                            <input type="number" class="form-control" placeholder="jumlah bayar" id="bayar">
-                        </div>
-                        <label for="kembalian">Jumlah Kembalian</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp</span>
-                            </div>
-                            <input type="text" class="form-control" placeholder="jumlah kembalian" id="kembalian" readonly>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button class="btn btn-lg btn-success btn-block" data-dismiss="modal" id="reset">Selesai</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- List Pesanan -->
+    <div class="kartu">
+      <div class="kartu-judul d-flex justify-content-between align-items-center">
+        <h6 class="text-muted text-uppercase">List Pesanan</h6>
+        <button class="btn btn-warning text-white" data-toggle="modal" data-target="#transaksi">
+          <i class="fa fa-cart-plus"></i> Check Out
+        </button>
+      </div>
+      <div class="kartu-body mb-0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>MENU</th>
+              <th>HARGA</th>
+              <th>QTY</th>
+              <th>SUB TOTAL</th>
+            </tr>
+          </thead>
+          <tbody id="pesanan"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="text-right font-weight-bold">TOTAL :</td>
+              <td><h5 id="total">0</h5></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
 
-    <script src="dist/js/jquery.min.js"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
-    <script src="dist/js/select2.full.min.js"></script>
-    <script src="dist/js/data.js"></script>
-    <script src="dist/js/script.js"></script>
+    <!-- Modal Check Out -->
+    <div class="modal fade" id="transaksi">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Total Bayar: Rp <span id="modalTotal">0</span></h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <label for="bayar">Jumlah Bayar</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp</span>
+              </div>
+              <input type="number" class="form-control" id="bayar" placeholder="Jumlah bayar">
+            </div>
+            <label for="kembalian">Jumlah Kembalian</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp</span>
+              </div>
+              <input type="text" class="form-control" id="kembalian" readonly>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success btn-block" id="selesai" data-dismiss="modal">Selesai</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center text-muted mt-4 mb-3">
+      <small>Create with <i class="fa fa-heart text-danger"></i> | MIT License</small>
+    </footer>
+  </div>
+
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let total = 0;
+    let pendapatan = 0;
+    let count = 0;
+
+    $('#menu').change(function() {
+      const harga = $(this).find(':selected').data('harga') || 0;
+      $('#harga').val(harga);
+    });
+
+    $('#add').click(function() {
+      const menu = $('#menu').val();
+      const harga = parseInt($('#harga').val());
+      const qty = parseInt($('#qty').val());
+      if (!menu || !harga || qty <= 0) {
+        alert('Pilih menu dan isi jumlah dengan benar!');
+        return;
+      }
+      count++;
+      const subtotal = harga * qty;
+      total += subtotal;
+
+      $('#pesanan').append(`
+        <tr>
+          <td>${count}</td>
+          <td>${menu}</td>
+          <td>${harga}</td>
+          <td>${qty}</td>
+          <td>${subtotal}</td>
+        </tr>
+      `);
+
+      $('#total').text(total);
+      $('#modalTotal').text(total);
+    });
+
+    $('#bayar').keyup(function() {
+      const bayar = parseInt($(this).val());
+      const kembalian = bayar - total;
+      $('#kembalian').val(kembalian > 0 ? kembalian : 0);
+    });
+
+    $('#selesai').click(function() {
+      pendapatan += total;
+      $('#pendapatan').text(pendapatan);
+      $('#pesanan').html('');
+      $('#total').text('0');
+      $('#modalTotal').text('0');
+      total = 0;
+      count = 0;
+      alert('Transaksi selesai!');
+    });
+  </script>
 </body>
-        </html>
+    </html>
