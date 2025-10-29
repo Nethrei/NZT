@@ -1,31 +1,459 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Contoh Tabel Nama</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Fighting Game</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #2c2c2c;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+        }
+        #game-canvas {
+            border: 4px solid #000;
+            background: #f0f0f0;
+            image-rendering: pixelated;
+        }
+        #menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        #menu h1 { font-size: 48px; margin-bottom: 20px; }
+        #start-btn {
+            padding: 15px 30px;
+            background: #444;
+            color: white;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background 0.2s;
+        }
+        #start-btn:hover { background: #666; }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .attack-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #444;
+            color: white;
+            border: 2px solid #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .attack-btn:hover { background: #666; }
+        .attack-btn:active { background: #888; }
+        #joystick {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #joystick-knob {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-  <h2 align="center" style="color:#FF0000;"> Daftar Nama dan Alamat </h2>
-  <table border="1" align="center" width="60%">
-    <tr style="color:#FF0000;">
-      <th>No</th>
-      <th>Nama</th>
-      <th>Alamat</th>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>Budi</td>
-      <td>Jakarta</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Sinta</td>
-      <td>Bandung</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Andi</td>
-      <td>Surabaya</td>
-    </tr>
-  </table>
+    <div id="game-container">
+        <div id="menu">
+            <h1>RPG Fighting Game</h1>
+            <button id="start-btn">Start Game</button>
+        </div>
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+        <div id="ui" style="display: none;">
+            <p id="health">Health: 100</p>
+            <p id="level">Level: 1</p>
+            <p id="xp">XP: 0/100</p>
+            <p id="inventory">Inventory: </p>
+            <p id="house-status">Outside House</p>
+        </div>
+        <div id="controls" style="display: none;">
+            <button class="attack-btn" id="basic-attack">Basic</button>
+            <button class="attack-btn" id="skill1">Skill 1</button>
+            <button class="attack-btn" id="ultimate">Ult</button>
+        </div>
+        <div id="joystick" style="display: none;">
+            <div id="joystick-knob"></div>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const menu = document.getElementById('menu');
+        const ui = {
+            health: document.getElementById('health'),
+            level: document.getElementById('level'),
+            xp: document.getElementById('xp'),
+            inventory: document.getElementById('inventory'),
+            houseStatus: document.getElementById('house-status')
+        };
+        const controls = {
+            basic: document.getElementById('basic-attack'),
+            skill1: document.getElementById('skill1'),
+            ultimate: document.getElementById('ultimate')
+        };
+        const joystick = document.getElementById('joystick');
+        const joystickKnob = document.getElementById('joystick-knob');
+        const startBtn = document.getElementById('start-btn');
+
+        // State game
+        let gameState = 'menu'; // 'menu' or 'game'
+        let particles = [];
+        let joystickActive = false;
+        let joystickX = 0, joystickY = 0;
+
+        // Kelas Particle
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.life = 20;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, 5, 5);
+            }
+        }
+
+        // Kelas Sword
+        class Sword {
+            constructor(damage = 15, range = 60) {
+                this.damage = damage;
+                this.range = range;
+            }
+            attack(player, opponent) {
+                if (player.checkCollision(opponent, this.range)) {
+                    opponent.takeDamage(this.damage);
+                    for (let i = 0; i < 5; i++) {
+                        particles.push(new Particle(opponent.x + opponent.width / 2, opponent.y, 'red'));
+                    }
+                }
+            }
+        }
+
+        // Kelas Player
+        class Player {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.width = 50;
+                this.height = 100;
+                this.color = color;
+                this.health = 100;
+                this.maxHealth = 100;
+                this.speed = 5;
+                this.attacking = false;
+                this.defending = false;
+                this.specialCooldown = 0;
+                this.sword = new Sword();
+                this.level = 1;
+                this.xp = 0;
+                this.xpToNext = 100;
+                this.inventory = [];
+                this.frame = 0;
+                this.animState = 'idle';
+                this.animTimer = 0;
+            }
+
+            move(dx, dy) {
+                let moved = false;
+                if (dx < 0 && this.x > 0) { this.x += dx * this.speed; moved = true; }
+                if (dx > 0 && this.x < 800 - this.width) { this.x += dx * this.speed; moved = true; }
+                if (dy < 0 && this.y > 0) { this.y += dy * this.speed; moved = true; }
+                if (dy > 0 && this.y < 600 - this.height) { this.y += dy * this.speed; moved = true; }
+                this.animState = moved ? 'walk' : 'idle';
+            }
+
+            basicAttack(opponent) {
+                if (!this.defending) {
+                    this.animState = 'attack';
+                    this.sword.attack(this, opponent);
+                    this.gainXp(10);
+                }
+            }
+
+            skill1(opponent) {
+                if (!this.defending && this.level >= 2) {
+                    this.animState = 'attack';
+                    if (this.checkCollision(opponent, 100)) {
+                        opponent.takeDamage(20);
+                        for (let i = 0; i < 10; i++) particles.push(new Particle(opponent.x, opponent.y, 'blue'));
+                    }
+                    this.gainXp(15);
+                }
+            }
+
+            ultimate(opponent) {
+                if (this.specialCooldown === 0 && this.level >= 3) {
+                    this.specialCooldown = 200;
+                    this.animState = 'attack';
+                    if (this.checkCollision(opponent, 150)) {
+                        opponent.takeDamage(50);
+                        for (let i = 0; i < 20; i++) particles.push(new Particle(opponent.x, opponent.y, 'yellow'));
+                    }
+                    this.gainXp(30);
+                }
+            }
+
+            defend() { this.defending = true; }
+
+            takeDamage(amount) {
+                if (!this.defending) this.health -= amount;
+                this.defending = false;
+            }
+
+            checkCollision(other, extraRange = 0) {
+                return (this.x < other.x + other.width + extraRange &&
+                        this.x + this.width + extraRange > other.x &&
+                        this.y < other.y + other.height + extraRange &&
+                        this.y + this.height + extraRange > other.y);
+            }
+
+            gainXp(amount) {
+                this.xp += amount;
+                if (this.xp >= this.xpToNext) this.levelUp();
+            }
+
+            levelUp() {
+                this.level++;
+                this.xp = 0;
+                this.xpToNext *= 1.5;
+                this.maxHealth += 20;
+                this.health = this.maxHealth;
+                this.sword.damage += 5;
+            }
+
+            update() {
+                if (this.specialCooldown > 0) this.specialCooldown--;
+                this.animTimer++;
+                if (this.animTimer > 10) {
+                    this.frame = (this.frame + 1) % 4;
+                    this.animTimer = 0;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                let scale = 1 + (this.animState === 'attack' ? 0.1 * Math.sin(this.frame) : 0);
+                ctx.fillRect(this.x, this.y, this.width * scale, this.height * scale);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(this.x, this.y - 20, this.width, 10);
+                ctx.fillStyle = 'green';
+                ctx.fillRect(this.x, this.y - 20, this.width * (this.health / this.maxHealth), 10);
+            }
+        }
+
+        // Kelas Ally
+        class Ally {
+            constructor(x, y, player) {
+                this.x = x;
+                this.y = y;
+                this.width = 40;
+                this.height = 80;
+                this.color = 'yellow';
+                this.health = 50;
+                this.player = player;
+            }
+            followPlayer() {
+                if (this.x < this.player.x - 50) this.x += 3;
+                else if (this.x > this.player.x + 50) this.x -= 3;
+                if (this.y < this.player.y) this.y += 3;
+                else if (this.y > this.player.y) this.y -= 3;
+            }
+            autoAttack(opponent) {
+                if (this.checkCollision(opponent)) opponent.takeDamage(10);
+            }
+            checkCollision(other) {
+                return (this.x < other.x + other.width && this.x + this.width > other.x &&
+                        this.y < other.y + other.height && this.y + this.height > other.y);
+            }
+            takeDamage(amount) { this.health -= amount; }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+        }
+
+        // Kelas House
+        class House {
+            constructor() { this.entered = false; }
+            enter(player) {
+                this.entered = true;
+                player.inventory.push('Health Potion');
+                ui.houseStatus.textContent = 'Inside House';
+            }
+            exit() {
+                this.entered = false;
+                ui.houseStatus.textContent = 'Outside House';
+            }
+            draw() {
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(0, 0, 800, 600);
+                ctx.fillStyle = 'white';
+                ctx.font = '36px Courier New';
+                ctx.fillText('Inside House - Press H to Exit', 150, 200);
+                ctx.fillStyle = 'green';
+                ctx.fillRect(300, 300, 50, 50);
+            }
+        }
+
+        // Inisialisasi
+        const player1 = new Player(100, 400, 'blue');
+        const ally = new Ally(150, 400, player1);
+        const house = new House();
+        const enemy = new Player(600, 400, 'red');
+        let inHouse = false;
+
+        // Event listeners
+        startBtn.addEventListener('click', () => {
+            gameState = 'game';
+            menu.style.display = 'none';
+            ui.health.parentElement.style.display = 'block';
+            controls.basic.parentElement.style.display = 'flex';
+            joystick.style.display = 'block';
+        });
+
+        // Joystick events
+        joystick.addEventListener('mousedown', (e) => {
+            joystickActive = true;
+            updateJoystick(e);
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (joystickActive) updateJoystick(e);
+        });
+        document.addEventListener('mouseup', () => {
+            joystickActive = false;
+            joystickX = 0;
+            joystickY = 0;
+            joystickKnob.style.transform = 'translate(0, 0)';
+        });
+
+        function updateJoystick(e) {
+            const rect = joystick.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            joystickX = (e.clientX - centerX) / 50;
+            joystickY = (e.clientY - centerY) / 50;
+            joystickX = Math.max(-1, Math.min(1, joystickX));
+            joystickY = Math.max(-1, Math.min(1, joystickY));
+            joystickKnob.style.transform = `translate(${joystickX * 30}px, ${joystickY * 30}px)`;
+        }
+
+        // Attack buttons
+        controls.basic.addEventListener('click', () => player1.basicAttack(enemy));
+        controls.skill1.addEventListener('click', () => player1.skill1(enemy));
+        controls.ultimate.addEventListener('click', () => player1.ultimate(enemy));
+
+        // Keyboard for house
+        document.addEventListener('keydown', (e) => {
+            if (gameState === 'game' && e.key === 'h') {
+                if (!inHouse) { house.enter(player1); inHouse = true; }
+                else { house.exit(); inHouse = false; }
+            }
+        });
+
+        // Game loop
+        function gameLoop() {
+            if (gameState === 'game') {
+                ctx.clearRect(0, 0, 800, 600);
+
+                if (!inHouse) {
+                    player1.move(joystickX, joystickY);
+                    player1.update();
+                    ally.followPlayer();
+                    ally.autoAttack(enemy);
+                    if (enemy.health <= 0) {
+                        player1.gainXp(50);
+                        enemy.health = 100;
+                    }
+                    player1.draw();
+                    ally.draw();
+                    enemy.draw();
+                } else {
+                    house.draw();
+                }
+
+                particles = particles.filter(p => p.life > 0);
+                particles.forEach(p => { p.update(); p.draw(); });
+
+                ui.health.textContent = `Health: ${player1.health}`;
+                ui.level.textContent = `Level: ${player1.level}`;
+                ui.xp.textContent = `XP: ${player1.xp}/${Math.floor(player1.xpToNext)}`;
+                ui.inventory.textContent = `Inventory: ${player1.inventory.join(', ')}`;
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+        gameLoop();
+    </script>
 </body>
-</html>
+  </html>
